@@ -1,0 +1,17 @@
+@import 'normalize.css';
+
+body {
+  background-color: #242424;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+canvas {
+  border: 5px solid black;
+  max-width: calc(100vw - 10px);
+  max-height: calc(100vh - 10px);
+  background: url('/assets/background.png');
+  background-size: cover;
+}
