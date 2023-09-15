@@ -26,7 +26,7 @@ export default class Game {
     this.context = this.canvas.getContext('2d')!
     this.stylize()
     this.keys = []
-    this.enemySize = 60
+    this.enemySize = 80
     this.player = new Player(this)
     this.fired = false
     this.projectiles = []
