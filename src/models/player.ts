@@ -2,15 +2,19 @@ import type { Game } from '@/types'
 import GameObject from '@/game-object'
 
 export default class Player extends GameObject {
-  public lives
+  public lives!: number
 
   constructor(game: Game) {
     super(game)
     this.width = 100
     this.height = 100
+    this.speed = 10
+    this.start()
+  }
+
+  public start() {
     this.x = this.game.width * 0.5 - this.width * 0.5
     this.y = this.game.height - this.height
-    this.speed = 10
     this.lives = 3
   }
 
