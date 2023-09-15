@@ -21,13 +21,13 @@ export default abstract class Enemy extends GameObject {
     this.y = y + this.originY
     // collision between enemy and projectiles
     this.game.projectiles.forEach((projectile) => {
-      if (!projectile.free && this.game.checkCollision(this, projectile)) {
+      if (!projectile.free && this.game.checkCollision(this, projectile) && this.lives > 0) {
         this.hit(1)
         projectile.free = true
       }
     })
     if (this.lives < 1) {
-      this.frameX++
+      if (this.game.updated) this.frameX++
       if (this.frameX > this.maxFrame) {
         this.markedForDeletion = true
         if (!this.game.isOver) this.game.score += this.maxLives

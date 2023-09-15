@@ -18,6 +18,9 @@ export default class Game {
   private fired
   private maxProjectiles
   private waveCount!: number
+  public updated
+  private timer
+  private interval
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
@@ -31,6 +34,9 @@ export default class Game {
     this.fired = false
     this.projectiles = []
     this.maxProjectiles = 10
+    this.updated = false
+    this.timer = 0
+    this.interval = 120
     this.start()
     this.createProjectiles()
     window.addEventListener('keydown', this.handleKeydown)
@@ -96,7 +102,14 @@ export default class Game {
     this.waves.push(new Wave(this))
   }
 
-  public render() {
+  public render(delta: number) {
+    if (this.timer > this.interval) {
+      this.updated = true
+      this.timer = 0
+    } else {
+      this.updated = false
+      this.timer += delta
+    }
     this.context.clearRect(0, 0, this.width, this.height)
     this.showStatus()
     this.player.draw()
