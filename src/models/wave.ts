@@ -1,6 +1,6 @@
-import type { Game } from '@/types'
+import type { Game, Enemy } from '@/types'
 import GameObject from '@/game-object'
-import Enemy from '@/enemy'
+import { Beetlemorph } from '@/enemy'
 
 export default class Wave extends GameObject {
   private speedX
@@ -42,7 +42,7 @@ export default class Wave extends GameObject {
       for (let x = 0; x < this.game.columns; x++) {
         const enemyX = x * this.game.enemySize
         const enemyY = y * this.game.enemySize
-        this.enemies.push(new Enemy(this.game, enemyX, enemyY))
+        this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
       }
     }
   }

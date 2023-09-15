@@ -1,9 +1,10 @@
 import type { Game } from '@/types'
 import GameObject from '@/game-object'
 
-export default class Enemy extends GameObject {
+export default abstract class Enemy extends GameObject {
   private positionX
   private positionY
+  protected image
   public markedForDeletion
 
   constructor(game: Game, x: number, y: number) {
@@ -13,10 +14,12 @@ export default class Enemy extends GameObject {
     this.positionX = x
     this.positionY = y
     this.markedForDeletion = false
+    this.image = new Image()
   }
 
   public draw() {
     this.game.context.strokeRect(this.x, this.y, this.width, this.height)
+    this.game.context.drawImage(this.image, this.x, this.y)
   }
 
   public update(x: number, y: number) {
@@ -42,5 +45,12 @@ export default class Enemy extends GameObject {
       this.game.isOver = true
       this.markedForDeletion = true
     }
+  }
+}
+
+export class Beetlemorph extends Enemy {
+  constructor(...params: ConstructorParameters<typeof Enemy>) {
+    super(...params)
+    this.image.src = 'assets/beetlemorph.png'
   }
 }
