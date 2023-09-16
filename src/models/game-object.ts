@@ -1,4 +1,4 @@
-import type { Game } from '@/types'
+import type { Game, ResourceFilename } from '@/types'
 
 export default abstract class GameObject {
   protected game
@@ -17,7 +17,7 @@ export default abstract class GameObject {
   public lives
   public maxLives
   public markedForDeletion
-  public spritesheet
+  private spritesheet
 
   constructor(game: Game) {
     this.game = game
@@ -41,4 +41,12 @@ export default abstract class GameObject {
 
   public abstract draw(): void
   public abstract update(x: number, y: number): void
+
+  protected set resource(filename: ResourceFilename) {
+    this.spritesheet.src = `assets/${filename}.png`
+  }
+
+  public get image() {
+    return this.spritesheet
+  }
 }

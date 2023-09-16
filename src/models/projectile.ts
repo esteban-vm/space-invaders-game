@@ -6,16 +6,14 @@ export default class Projectile extends GameObject {
 
   constructor(game: Game) {
     super(game)
-    this.width = 8
+    this.width = 3
     this.height = 40
     this.speed = 20
     this.free = true
   }
 
   public draw() {
-    if (!this.free) {
-      this.game.context.fillRect(this.x, this.y, this.width, this.height)
-    }
+    if (!this.free) this.game.fill(this, 'gold')
   }
 
   public update() {

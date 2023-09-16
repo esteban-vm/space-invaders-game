@@ -1,42 +1,46 @@
-import type { GameObject } from '@/types'
+import type { GameObject, ControlKey } from '@/types'
 import { Player, Projectile, Wave } from '@/models'
 
 export default class Game {
   private canvas
+  private context
   public width
   public height
-  public context
-  public keys: string[]
   public enemySize
+  public playerSize
   public player
-  public projectiles: Projectile[]
+  public debug
+  public updated
+  public fired
+  public keys
+  public projectiles
+  public maxProjectiles
+  public timer
+  public interval
   public columns!: number
   public rows!: number
   public score!: number
   public isOver!: boolean
-  private waves!: Wave[]
-  private fired
-  private maxProjectiles
-  private waveCount!: number
-  public updated
-  private timer
-  private interval
+  public waves!: Wave[]
+  public waveCount!: number
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
+    this.context = this.canvas.getContext('2d')!
     this.width = 600
     this.height = 800
-    this.context = this.canvas.getContext('2d')!
-    this.stylize()
-    this.keys = []
     this.enemySize = 80
+    this.playerSize = { width: 140, height: 120 }
     this.player = new Player(this)
-    this.fired = false
-    this.projectiles = []
-    this.maxProjectiles = 10
+    this.debug = import.meta.env.DEV
     this.updated = false
+    this.fired = false
+    this.keys = <string[]>[]
+    this.projectiles = <Projectile[]>[]
+    this.maxProjectiles = 10
     this.timer = 0
     this.interval = 120
+    this.stylize()
     this.start()
     this.createProjectiles()
     window.addEventListener('keydown', this.handleKeydown)
@@ -48,7 +52,6 @@ export default class Game {
     this.canvas.height = this.height
     this.context.fillStyle = 'aliceblue'
     this.context.strokeStyle = 'aliceblue'
-    this.context.lineWidth = 5
     this.context.font = '30px Impact'
   }
 
@@ -80,8 +83,11 @@ export default class Game {
     this.context.shadowColor = 'black'
     this.context.fillText(`Score: ${this.score}`, 20, 40)
     this.context.fillText(`Wave: ${this.waveCount}`, 20, 80)
+    for (let live = 0; live < this.player.maxLives; live++) {
+      this.context.strokeRect(20 + 20 * live, 100, 10, 15)
+    }
     for (let live = 0; live < this.player.lives; live++) {
-      this.context.fillRect(20 + 10 * live, 100, 5, 20)
+      this.context.fillRect(20 + 20 * live, 100, 10, 15)
     }
     if (this.isOver) {
       this.context.textAlign = 'center'
@@ -102,6 +108,54 @@ export default class Game {
     this.waves.push(new Wave(this))
   }
 
+  public getProjectile() {
+    for (const projectile of this.projectiles) {
+      if (projectile.free) return projectile
+    }
+  }
+
+  private handleKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' && !this.fired) this.player.shoot()
+    if (event.key === 'r' && this.isOver) this.restart()
+    if (event.key === 'd') this.debug = !this.debug
+    if (this.keys.indexOf(event.key) === -1) this.keys.push(event.key)
+    this.fired = true
+  }
+
+  private handleKeyup = (event: KeyboardEvent) => {
+    const index = this.keys.indexOf(event.key)
+    if (index > -1) this.keys.splice(index, 1)
+    this.fired = false
+  }
+
+  public isPressed(key: ControlKey) {
+    return this.keys.indexOf(key) > -1
+  }
+
+  public add(obj: GameObject) {
+    const { image, x, y, frameX, frameY, width, height } = obj
+    this.context.drawImage(image, frameX * width, frameY * height, width, height, x, y, width, height)
+  }
+
+  public fill(obj: GameObject, color?: string) {
+    const { x, y, width, height } = obj
+    this.context.save()
+    this.context.fillStyle = color ?? 'aliceblue'
+    this.context.fillRect(x, y, width, height)
+    this.context.restore()
+  }
+
+  public stroke(obj: GameObject) {
+    const { x, y, width, height } = obj
+    this.context.save()
+    this.context.strokeRect(x, y, width, height)
+    this.context.restore()
+  }
+
+  public checkCollision(a: GameObject, b: GameObject) {
+    return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y
+  }
+
   public render(delta: number) {
     if (this.timer > this.interval) {
       this.updated = true
@@ -112,44 +166,21 @@ export default class Game {
     }
     this.context.clearRect(0, 0, this.width, this.height)
     this.showStatus()
-    this.player.draw()
-    this.player.update()
     this.projectiles.forEach((projectile) => {
       projectile.draw()
       projectile.update()
     })
+    this.player.draw()
+    this.player.update()
     this.waves.forEach((wave) => {
       wave.draw()
       wave.update()
       if (wave.enemies.length < 1 && !wave.nextTrigger && !this.isOver) {
         this.newWave()
         this.waveCount++
-        this.player.lives++
         wave.nextTrigger = true
+        if (this.player.lives < this.player.maxLives) this.player.lives++
       }
     })
-  }
-
-  public getProjectile() {
-    for (const projectile of this.projectiles) {
-      if (projectile.free) return projectile
-    }
-  }
-
-  public checkCollision(a: GameObject, b: GameObject) {
-    return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y
-  }
-
-  private handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter' && !this.fired) this.player.shoot()
-    this.fired = true
-    if (this.keys.indexOf(event.key) === -1) this.keys.push(event.key)
-    if (event.key === 'r' && this.isOver) this.restart()
-  }
-
-  private handleKeyup = (event: KeyboardEvent) => {
-    this.fired = false
-    const index = this.keys.indexOf(event.key)
-    if (index > -1) this.keys.splice(index, 1)
   }
 }
