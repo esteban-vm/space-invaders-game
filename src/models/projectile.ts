@@ -13,7 +13,7 @@ export default class Projectile extends GameObject {
   }
 
   public draw() {
-    if (!this.free) this.game.fill(this, 'gold')
+    if (!this.free) this.game.fill(this)
   }
 
   public update() {

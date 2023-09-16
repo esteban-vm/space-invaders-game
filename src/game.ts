@@ -4,12 +4,12 @@ import { Player, Projectile, Wave } from '@/models'
 export default class Game {
   private canvas
   private context
+  private debug
   public width
   public height
   public enemySize
   public playerSize
   public player
-  public debug
   public updated
   public fired
   public keys
@@ -27,12 +27,12 @@ export default class Game {
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.context = this.canvas.getContext('2d')!
+    this.debug = import.meta.env.DEV
     this.width = 600
     this.height = 800
     this.enemySize = 80
     this.playerSize = { width: 140, height: 120 }
     this.player = new Player(this)
-    this.debug = import.meta.env.DEV
     this.updated = false
     this.fired = false
     this.keys = <string[]>[]
@@ -137,19 +137,21 @@ export default class Game {
     this.context.drawImage(image, frameX * width, frameY * height, width, height, x, y, width, height)
   }
 
-  public fill(obj: GameObject, color?: string) {
+  public fill(obj: GameObject) {
     const { x, y, width, height } = obj
     this.context.save()
-    this.context.fillStyle = color ?? 'aliceblue'
+    this.context.fillStyle = 'gold'
     this.context.fillRect(x, y, width, height)
     this.context.restore()
   }
 
   public stroke(obj: GameObject) {
-    const { x, y, width, height } = obj
-    this.context.save()
-    this.context.strokeRect(x, y, width, height)
-    this.context.restore()
+    if (this.debug) {
+      const { x, y, width, height } = obj
+      this.context.save()
+      this.context.strokeRect(x, y, width, height)
+      this.context.restore()
+    }
   }
 
   public checkCollision(a: GameObject, b: GameObject) {

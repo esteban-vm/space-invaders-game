@@ -11,7 +11,7 @@ export default abstract class Enemy extends GameObject {
   }
 
   public draw() {
-    if (this.game.debug) this.game.stroke(this)
+    this.game.stroke(this)
     this.game.add(this)
   }
 
@@ -47,7 +47,7 @@ export default abstract class Enemy extends GameObject {
     }
   }
 
-  private hit(damage: number) {
+  protected hit(damage: number) {
     this.lives -= damage
   }
 }
@@ -60,5 +60,21 @@ export class Beetlemorph extends Enemy {
     this.maxFrame = 2
     this.lives = 1
     this.maxLives = this.lives
+  }
+}
+
+export class Rhinomorph extends Enemy {
+  constructor(...params: ConstructorParameters<typeof Enemy>) {
+    super(...params)
+    this.resource = 'rhinomorph'
+    this.frameY = Math.floor(Math.random() * 4)
+    this.maxFrame = 5
+    this.lives = 4
+    this.maxLives = this.lives
+  }
+
+  protected hit(damage: number) {
+    super.hit(damage)
+    this.frameX = this.maxLives - Math.floor(this.lives)
   }
 }

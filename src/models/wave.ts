@@ -1,6 +1,6 @@
 import type { Game, Enemy } from '@/types'
 import GameObject from '@/game-object'
-import { Beetlemorph } from '@/enemy'
+import { Beetlemorph, Rhinomorph } from '@/enemy'
 
 export default class Wave extends GameObject {
   public nextTrigger
@@ -41,7 +41,8 @@ export default class Wave extends GameObject {
       for (let x = 0; x < this.game.columns; x++) {
         const enemyX = x * this.game.enemySize
         const enemyY = y * this.game.enemySize
-        this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
+        if (Math.random() < 0.5) this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
+        else this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
       }
     }
   }

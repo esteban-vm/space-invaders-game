@@ -25,7 +25,7 @@ export default class Player extends GameObject {
   public draw() {
     if (this.game.isPressed('Enter')) this.frameX = 1
     else this.frameX = 0
-    if (this.game.debug) this.game.fill(this)
+    this.game.stroke(this)
     this.jets.draw()
     this.game.add(this)
   }
