@@ -1,4 +1,4 @@
-import type { GameObject, ControlKey } from '@/types'
+import type { GameObject, GraphicGameObject, ControlKey } from '@/types'
 import { Player, Boss, Projectile, Wave } from '@/models'
 
 export default class Game {
@@ -143,7 +143,7 @@ export default class Game {
     return this.keys.indexOf(key) > -1
   }
 
-  public add(obj: GameObject) {
+  public add(obj: GraphicGameObject) {
     const { image, x, y, frameX, frameY, width, height } = obj
     this.context.drawImage(image, frameX * width, frameY * height, width, height, x, y, width, height)
   }
@@ -156,7 +156,7 @@ export default class Game {
     this.context.restore()
   }
 
-  public stroke(obj: GameObject) {
+  public stroke(obj: GraphicGameObject) {
     if (this.debug) {
       const { x, y, width, height, lives } = obj
       this.context.save()

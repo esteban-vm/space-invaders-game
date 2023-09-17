@@ -1,5 +1,5 @@
 import type { Game } from '@/types'
-import GameObject from '@/game-object'
+import { GameObject } from '@/game-object'
 
 export default class Projectile extends GameObject {
   public free

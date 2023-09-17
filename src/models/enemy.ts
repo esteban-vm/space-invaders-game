@@ -1,13 +1,14 @@
-import type { Game } from '@/types'
-import GameObject from '@/game-object'
+import type { Game, ResourceFilename } from '@/types'
+import { GraphicGameObject } from '@/game-object'
 
-export default abstract class Enemy extends GameObject {
-  constructor(game: Game, x: number, y: number) {
-    super(game)
+export default abstract class Enemy extends GraphicGameObject {
+  constructor(filename: ResourceFilename, game: Game, x: number, y: number) {
+    super(game, filename)
     this.width = this.game.enemySize
     this.height = this.game.enemySize
     this.originX = x
     this.originY = y
+    this.frameY = Math.floor(Math.random() * 4)
   }
 
   public draw() {
@@ -50,24 +51,20 @@ export default abstract class Enemy extends GameObject {
 }
 
 export class Beetlemorph extends Enemy {
-  constructor(...params: ConstructorParameters<typeof Enemy>) {
-    super(...params)
-    this.resource = 'beetlemorph'
-    this.frameY = Math.floor(Math.random() * 4)
-    this.maxFrame = 2
+  constructor(...params: [game: Game, x: number, y: number]) {
+    super('beetlemorph', ...params)
     this.lives = 1
     this.maxLives = this.lives
+    this.maxFrame = 2
   }
 }
 
 export class Rhinomorph extends Enemy {
-  constructor(...params: ConstructorParameters<typeof Enemy>) {
-    super(...params)
-    this.resource = 'rhinomorph'
-    this.frameY = Math.floor(Math.random() * 4)
-    this.maxFrame = 5
+  constructor(...params: [game: Game, x: number, y: number]) {
+    super('rhinomorph', ...params)
     this.lives = 4
     this.maxLives = this.lives
+    this.maxFrame = 5
   }
 
   protected hit(damage: number) {

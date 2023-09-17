@@ -1,13 +1,12 @@
 import type { Game } from '@/types'
-import GameObject from '@/game-object'
+import { GraphicGameObject } from '@/game-object'
 import Jets from '@/jets'
 
-export default class Player extends GameObject {
+export default class Player extends GraphicGameObject {
   private jets
 
   constructor(game: Game) {
-    super(game)
-    this.resource = 'player'
+    super(game, 'player')
     this.width = this.game.playerSize.width
     this.height = this.game.playerSize.height
     this.speed = 5
