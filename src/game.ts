@@ -1,5 +1,5 @@
 import type { GameObject, ControlKey } from '@/types'
-import { Player, Projectile, Wave } from '@/models'
+import { Player, Boss, Projectile, Wave } from '@/models'
 
 export default class Game {
   private canvas
@@ -21,6 +21,7 @@ export default class Game {
   public rows!: number
   public score!: number
   public isOver!: boolean
+  public bosses!: Boss[]
   public waves!: Wave[]
   public waveCount!: number
 
@@ -60,8 +61,10 @@ export default class Game {
     this.rows = 2
     this.score = 0
     this.isOver = false
+    this.bosses = []
+    this.bosses.push(new Boss(this))
     this.waves = []
-    this.waves.push(new Wave(this))
+    // this.waves.push(new Wave(this))
     this.waveCount = 1
   }
 
@@ -106,12 +109,7 @@ export default class Game {
       this.rows++
     }
     this.waves.push(new Wave(this))
-  }
-
-  public getProjectile() {
-    for (const projectile of this.projectiles) {
-      if (projectile.free) return projectile
-    }
+    this.waves = this.waves.filter((wave) => !wave.markedForDeletion)
   }
 
   private handleKeydown = (event: KeyboardEvent) => {
@@ -126,6 +124,12 @@ export default class Game {
     const index = this.keys.indexOf(event.key)
     if (index > -1) this.keys.splice(index, 1)
     this.fired = false
+  }
+
+  public getProjectile() {
+    for (const projectile of this.projectiles) {
+      if (projectile.free) return projectile
+    }
   }
 
   public isPressed(key: ControlKey) {
@@ -147,9 +151,14 @@ export default class Game {
 
   public stroke(obj: GameObject) {
     if (this.debug) {
-      const { x, y, width, height } = obj
+      const { x, y, width, height, lives } = obj
       this.context.save()
       this.context.strokeRect(x, y, width, height)
+      this.context.textAlign = 'center'
+      this.context.shadowOffsetX = 3
+      this.context.shadowOffsetY = 3
+      this.context.shadowColor = 'black'
+      this.context.fillText(lives.toString(), x + width, y + 10)
       this.context.restore()
     }
   }
@@ -172,8 +181,10 @@ export default class Game {
       projectile.draw()
       projectile.update()
     })
-    this.player.draw()
-    this.player.update()
+    this.bosses.forEach((boss) => {
+      boss.draw()
+      boss.update()
+    })
     this.waves.forEach((wave) => {
       wave.draw()
       wave.update()
@@ -184,5 +195,8 @@ export default class Game {
         if (this.player.lives < this.player.maxLives) this.player.lives++
       }
     })
+    this.bosses = this.bosses.filter((boss) => !boss.markedForDeletion)
+    this.player.draw()
+    this.player.update()
   }
 }

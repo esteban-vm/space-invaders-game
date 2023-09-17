@@ -1,3 +1,4 @@
+export { default as Boss } from '@/boss'
 export { default as Enemy, Beetlemorph, Rhinomorph } from '@/enemy'
 export { default as GameObject } from '@/game-object'
 export { default as Jets } from '@/jets'

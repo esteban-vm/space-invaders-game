@@ -4,7 +4,7 @@ import { Beetlemorph, Rhinomorph } from '@/enemy'
 
 export default class Wave extends GameObject {
   public nextTrigger
-  public enemies: Enemy[]
+  public enemies
 
   constructor(game: Game) {
     super(game)
@@ -15,7 +15,7 @@ export default class Wave extends GameObject {
     this.speedX = Math.random() < 0.5 ? -1 : 1
     this.speedY = 0
     this.nextTrigger = false
-    this.enemies = []
+    this.enemies = <Enemy[]>[]
     this.create()
   }
 
@@ -34,6 +34,7 @@ export default class Wave extends GameObject {
     this.y += this.speedY
     this.enemies.forEach((enemy) => enemy.update(this.x, this.y))
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion)
+    if (this.enemies.length <= 0) this.markedForDeletion = true
   }
 
   private create() {
