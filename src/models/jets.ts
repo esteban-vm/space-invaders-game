@@ -13,8 +13,11 @@ export default class Jets extends GraphicGameObject {
     this.game.add(this)
   }
 
-  public update(x: number, y: number) {
-    this.x = x
-    this.y = y
+  public update() {
+    if (this.game.isPressed('ArrowLeft')) this.frameX = 0
+    else if (this.game.isPressed('ArrowRight')) this.frameX = 2
+    else this.frameX = 1
+    this.x = this.game.player.x
+    this.y = this.game.player.y
   }
 }

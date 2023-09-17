@@ -49,6 +49,8 @@ export default class Game {
     this.canvas.width = this.width
     this.canvas.height = this.height
     this.createProjectiles()
+    this.handleKeydown = this.handleKeydown.bind(this)
+    this.handleKeyup = this.handleKeyup.bind(this)
     window.addEventListener('keydown', this.handleKeydown)
     window.addEventListener('keyup', this.handleKeyup)
   }
@@ -107,8 +109,8 @@ export default class Game {
     else document.exitFullscreen()
   }
 
-  private handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter' && !this.fired) this.player.shoot()
+  private handleKeydown(event: KeyboardEvent) {
+    if (event.key === '1' && !this.fired) this.player.shoot()
     if (event.key === 'r' && this.isOver) this.restart()
     if (event.key === 'd') this.debug = !this.debug
     if (event.key === 'f') this.toggleFullscreen()
@@ -116,7 +118,7 @@ export default class Game {
     this.fired = true
   }
 
-  private handleKeyup = (event: KeyboardEvent) => {
+  private handleKeyup(event: KeyboardEvent) {
     const index = this.keys.indexOf(event.key)
     if (index > -1) this.keys.splice(index, 1)
     this.fired = false
@@ -159,6 +161,8 @@ export default class Game {
     this.context.save()
     this.context.fillStyle = 'gold'
     this.context.fillRect(x, y, width, height)
+    this.context.fillStyle = 'white'
+    this.context.fillRect(x + width * 0.2, y, width * 0.6, height)
     this.context.restore()
   }
 
