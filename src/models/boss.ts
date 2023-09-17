@@ -11,8 +11,8 @@ export default class Boss extends GraphicGameObject {
     this.speedX = Math.random() < 0.5 ? -1 : 1
     this.frameY = Math.floor(Math.random() * 4)
     this.maxFrame = 11
-    this.lives = 10
-    this.maxLives = this.lives
+    this.health = 10
+    this.maxHealth = this.health
   }
 
   public draw() {
@@ -38,12 +38,12 @@ export default class Boss extends GraphicGameObject {
       }
     })
     // boss destroyed
-    if (this.lives < 1 && this.game.updated) {
+    if (!this.alive && this.game.updated) {
       this.frameX++
       if (this.frameX > this.maxFrame) {
         this.markedForDeletion = true
         if (!this.game.isOver) {
-          this.game.score += this.maxLives
+          this.game.score += this.maxHealth
           this.game.newWave()
         }
       }
@@ -51,14 +51,14 @@ export default class Boss extends GraphicGameObject {
     // collision between boss and player
     if (this.game.checkCollision(this, this.game.player) && this.alive) {
       this.game.isOver = true
-      this.lives = 0
+      this.health = 0
     }
     // lose condition
     if (this.y + this.height > this.game.height) this.game.isOver = true
   }
 
   public hit(damage: number) {
-    this.lives -= damage
+    this.health -= damage
     if (this.alive) this.frameX = 1
   }
 }

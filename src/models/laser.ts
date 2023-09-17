@@ -15,11 +15,15 @@ export default abstract class Laser extends GameObject {
     if (this.game.updated) {
       this.game.waves.forEach((wave) => {
         wave.enemies.forEach((enemy) => {
-          if (this.game.checkCollision(this, enemy)) enemy.hit(this.damage)
+          if (this.game.checkCollision(this, enemy)) {
+            enemy.hit(this.damage)
+          }
         })
       })
       this.game.bosses.forEach((boss) => {
-        if (this.game.checkCollision(this, boss)) boss.hit(this.damage)
+        if (this.game.checkCollision(this, boss) && boss.y >= 0) {
+          boss.hit(this.damage)
+        }
       })
     }
   }

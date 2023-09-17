@@ -27,17 +27,17 @@ export default abstract class Enemy extends GraphicGameObject {
       }
     })
     // enemy destroyed
-    if (this.lives < 1) {
+    if (!this.alive) {
       if (this.game.updated) this.frameX++
       if (this.frameX > this.maxFrame) {
         this.markedForDeletion = true
-        if (!this.game.isOver) this.game.score += this.maxLives
+        if (!this.game.isOver) this.game.score += this.maxHealth
       }
     }
     // collision between enemy and player
     if (this.game.checkCollision(this, this.game.player) && this.alive) {
-      this.lives = 0
-      this.game.player.lives--
+      this.health = 0
+      this.game.player.health--
     }
     // lose condition
     if (this.y + this.height > this.game.height || !this.game.player.alive) {
@@ -46,15 +46,15 @@ export default abstract class Enemy extends GraphicGameObject {
   }
 
   public hit(damage: number) {
-    this.lives -= damage
+    this.health -= damage
   }
 }
 
 export class Beetlemorph extends Enemy {
   constructor(...params: [game: Game, x: number, y: number]) {
     super('beetlemorph', ...params)
-    this.lives = 1
-    this.maxLives = this.lives
+    this.health = 1
+    this.maxHealth = this.health
     this.maxFrame = 2
   }
 }
@@ -62,13 +62,13 @@ export class Beetlemorph extends Enemy {
 export class Rhinomorph extends Enemy {
   constructor(...params: [game: Game, x: number, y: number]) {
     super('rhinomorph', ...params)
-    this.lives = 4
-    this.maxLives = this.lives
+    this.health = 4
+    this.maxHealth = this.health
     this.maxFrame = 5
   }
 
   public hit(damage: number) {
     super.hit(damage)
-    this.frameX = this.maxLives - Math.floor(this.lives)
+    this.frameX = this.maxHealth - Math.floor(this.health)
   }
 }

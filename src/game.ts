@@ -88,10 +88,10 @@ export default class Game {
     this.context.shadowColor = 'black'
     this.context.fillText(`Score: ${this.score}`, 20, 40)
     this.context.fillText(`Wave: ${this.waveCount}`, 20, 80)
-    for (let live = 0; live < this.player.maxLives; live++) {
+    for (let live = 0; live < this.player.maxHealth; live++) {
       this.context.strokeRect(20 + 20 * live, 100, 10, 15)
     }
-    for (let live = 0; live < this.player.lives; live++) {
+    for (let live = 0; live < this.player.health; live++) {
       this.context.fillRect(20 + 20 * live, 100, 10, 15)
     }
     if (this.isOver) {
@@ -126,7 +126,7 @@ export default class Game {
 
   public newWave() {
     this.waveCount++
-    if (this.player.lives < this.player.maxLives) this.player.lives++
+    if (this.player.health < this.player.maxHealth) this.player.health++
     if (this.waveCount % 2 === 0) {
       this.bosses.push(new Boss(this))
     } else {
@@ -168,7 +168,7 @@ export default class Game {
 
   public stroke(obj: GraphicGameObject) {
     if (this.debug) {
-      const { x, y, width, height, lives } = obj
+      const { x, y, width, height, health } = obj
       this.context.save()
       this.context.strokeRect(x, y, width, height)
       this.context.font = '25px Impact'
@@ -177,7 +177,7 @@ export default class Game {
       this.context.shadowOffsetX = 3
       this.context.shadowOffsetY = 3
       this.context.shadowColor = 'black'
-      this.context.fillText(lives.toFixed(1).replace(/\.0$/, ''), x + width, y + 10)
+      this.context.fillText(health.toFixed(1).replace(/\.0$/, ''), x + width, y + 10)
       this.context.restore()
     }
   }

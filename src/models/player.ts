@@ -22,8 +22,8 @@ export default class Player extends GraphicGameObject {
   public start() {
     this.x = this.game.width * 0.5 - this.width * 0.5
     this.y = this.game.height - this.height
-    this.lives = 3
-    this.maxLives = 10
+    this.health = 3
+    this.maxHealth = 10
   }
 
   public draw() {

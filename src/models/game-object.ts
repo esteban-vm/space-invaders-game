@@ -35,8 +35,8 @@ export abstract class GraphicGameObject extends GameObject {
   public frameX
   public frameY
   public maxFrame
-  public lives
-  public maxLives
+  public health
+  public maxHealth
   public image
 
   constructor(game: Game, filename: ResourceFilename) {
@@ -44,13 +44,13 @@ export abstract class GraphicGameObject extends GameObject {
     this.frameX = 0
     this.frameY = 0
     this.maxFrame = 0
-    this.lives = 0
-    this.maxLives = 0
+    this.health = 0
+    this.maxHealth = 0
     this.image = new Image()
     this.image.src = `assets/${filename}.png`
   }
 
   public get alive() {
-    return this.lives >= 1
+    return this.health >= 1
   }
 }
