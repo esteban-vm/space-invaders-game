@@ -88,12 +88,18 @@ export default class Game {
     this.context.shadowColor = 'black'
     this.context.fillText(`Score: ${this.score}`, 20, 40)
     this.context.fillText(`Wave: ${this.waveCount}`, 20, 80)
-    for (let live = 0; live < this.player.maxHealth; live++) {
-      this.context.strokeRect(20 + 20 * live, 100, 10, 15)
+    for (let unit = 0; unit < this.player.maxHealth; unit++) {
+      this.context.strokeRect(20 + 20 * unit, 100, 10, 15)
     }
-    for (let live = 0; live < this.player.health; live++) {
-      this.context.fillRect(20 + 20 * live, 100, 10, 15)
+    for (let unit = 0; unit < this.player.health; unit++) {
+      this.context.fillRect(20 + 20 * unit, 100, 10, 15)
     }
+    this.context.save()
+    this.context.fillStyle = this.player.cooldown ? 'red' : 'gold'
+    for (let unit = 0; unit < this.player.energy; unit++) {
+      this.context.fillRect(20 + 2 * unit, 130, 2, 15)
+    }
+    this.context.restore()
     if (this.isOver) {
       this.context.textAlign = 'center'
       this.context.font = '100px Impact'

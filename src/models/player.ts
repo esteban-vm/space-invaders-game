@@ -7,6 +7,9 @@ export default class Player extends GraphicGameObject {
   private jets
   private smLaser
   private lgLaser
+  public energy
+  public maxEnergy
+  public cooldown
 
   constructor(game: Game) {
     super(game, 'player')
@@ -16,6 +19,9 @@ export default class Player extends GraphicGameObject {
     this.jets = new Jets(this.game)
     this.smLaser = new SmallLaser(this.game)
     this.lgLaser = new LargeLaser(this.game)
+    this.energy = 50
+    this.maxEnergy = 100
+    this.cooldown = false
     this.start()
   }
 
@@ -27,23 +33,19 @@ export default class Player extends GraphicGameObject {
   }
 
   public draw() {
-    if (this.game.isPressed('1')) {
-      this.frameX = 1
-    } else if (this.game.isPressed('2')) {
-      this.frameX = 2
-      this.smLaser.draw()
-    } else if (this.game.isPressed('3')) {
-      this.frameX = 3
-      this.lgLaser.draw()
-    } else {
-      this.frameX = 0
-    }
+    if (this.game.isPressed('1')) this.frameX = 1
+    else if (this.game.isPressed('2')) this.smLaser.draw()
+    else if (this.game.isPressed('3')) this.lgLaser.draw()
+    else this.frameX = 0
     this.jets.draw()
     this.game.stroke(this)
     this.game.add(this)
   }
 
   public update() {
+    if (this.energy < this.maxEnergy) this.energy += 0.05
+    if (this.energy < 1) this.cooldown = true
+    else if (this.energy > this.maxEnergy * 0.2) this.cooldown = false
     // horizontal movement
     if (this.game.isPressed('ArrowLeft')) this.x -= this.speed
     else if (this.game.isPressed('ArrowRight')) this.x += this.speed

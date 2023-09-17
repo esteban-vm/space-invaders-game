@@ -12,6 +12,7 @@ export default abstract class Laser extends GameObject {
 
   public draw() {
     this.game.fill(this)
+    this.game.player.energy -= this.damage
     if (this.game.updated) {
       this.game.waves.forEach((wave) => {
         wave.enemies.forEach((enemy) => {
@@ -31,6 +32,10 @@ export default abstract class Laser extends GameObject {
   public update() {
     this.x = this.game.player.x + this.game.player.width * 0.5 - this.width * 0.5
   }
+
+  protected get cannotDraw() {
+    return !(this.game.player.energy > 1 && !this.game.player.cooldown)
+  }
 }
 
 export class SmallLaser extends Laser {
@@ -39,6 +44,12 @@ export class SmallLaser extends Laser {
     this.width = 5
     this.damage = 0.2
   }
+
+  public draw() {
+    if (this.cannotDraw) return
+    super.draw()
+    this.game.player.frameX = 2
+  }
 }
 
 export class LargeLaser extends Laser {
@@ -46,5 +57,11 @@ export class LargeLaser extends Laser {
     super(game)
     this.width = 25
     this.damage = 0.7
+  }
+
+  public draw() {
+    if (this.cannotDraw) return
+    super.draw()
+    this.game.player.frameX = 3
   }
 }
