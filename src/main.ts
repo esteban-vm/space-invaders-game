@@ -13,5 +13,6 @@ window.addEventListener('load', function () {
     this.requestAnimationFrame(animate)
   }
 
+  this.focus()
   animate(0)
 })

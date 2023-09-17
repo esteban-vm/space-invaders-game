@@ -2,6 +2,7 @@ import type { Game } from '@/types'
 import GameObject from '@/game-object'
 
 export default class Projectile extends GameObject {
+  public damage
   public free
 
   constructor(game: Game) {
@@ -9,6 +10,7 @@ export default class Projectile extends GameObject {
     this.width = 3
     this.height = 40
     this.speed = 20
+    this.damage = 1
     this.free = true
   }
 

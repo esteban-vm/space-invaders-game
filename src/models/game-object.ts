@@ -49,4 +49,8 @@ export abstract class GraphicGameObject extends GameObject {
     this.image = new Image()
     this.image.src = `assets/${filename}.png`
   }
+
+  public get alive() {
+    return this.lives >= 1
+  }
 }

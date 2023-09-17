@@ -21,8 +21,8 @@ export default abstract class Enemy extends GraphicGameObject {
     this.y = y + this.originY
     // collision between enemy and projectiles
     this.game.projectiles.forEach((projectile) => {
-      if (!projectile.free && this.game.checkCollision(this, projectile) && this.lives > 0) {
-        this.hit(1)
+      if (!projectile.free && this.game.checkCollision(this, projectile) && this.alive) {
+        this.hit(projectile.damage)
         projectile.free = true
       }
     })
@@ -35,17 +35,17 @@ export default abstract class Enemy extends GraphicGameObject {
       }
     }
     // collision between enemy and player
-    if (this.game.checkCollision(this, this.game.player) && this.lives > 0) {
+    if (this.game.checkCollision(this, this.game.player) && this.alive) {
       this.lives = 0
       this.game.player.lives--
     }
     // lose condition
-    if (this.y + this.height > this.game.height || this.game.player.lives < 1) {
+    if (this.y + this.height > this.game.height || !this.game.player.alive) {
       this.game.isOver = true
     }
   }
 
-  protected hit(damage: number) {
+  public hit(damage: number) {
     this.lives -= damage
   }
 }
@@ -67,7 +67,7 @@ export class Rhinomorph extends Enemy {
     this.maxFrame = 5
   }
 
-  protected hit(damage: number) {
+  public hit(damage: number) {
     super.hit(damage)
     this.frameX = this.maxLives - Math.floor(this.lives)
   }

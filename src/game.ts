@@ -177,7 +177,7 @@ export default class Game {
       this.context.shadowOffsetX = 3
       this.context.shadowOffsetY = 3
       this.context.shadowColor = 'black'
-      this.context.fillText(lives.toString(), x + width, y + 10)
+      this.context.fillText(lives.toFixed(1).replace(/\.0$/, ''), x + width, y + 10)
       this.context.restore()
     }
   }

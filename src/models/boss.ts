@@ -22,9 +22,9 @@ export default class Boss extends GraphicGameObject {
 
   public update() {
     this.speedY = 0
-    if (this.game.updated && this.lives > 0) this.frameX = 0
+    if (this.game.updated && this.alive) this.frameX = 0
     if (this.y < 0) this.y += 4
-    if (this.x < 0 || (this.x > this.game.width - this.width && this.lives > 0)) {
+    if (this.x < 0 || (this.x > this.game.width - this.width && this.alive)) {
       this.speedX *= -1
       this.speedY = this.height * 0.5
     }
@@ -32,8 +32,8 @@ export default class Boss extends GraphicGameObject {
     this.y += this.speedY
     // collision between boss and projectiles
     this.game.projectiles.forEach((projectile) => {
-      if (!projectile.free && this.game.checkCollision(this, projectile) && this.lives > 0 && this.y >= 0) {
-        this.hit(1)
+      if (!projectile.free && this.game.checkCollision(this, projectile) && this.alive && this.y >= 0) {
+        this.hit(projectile.damage)
         projectile.free = true
       }
     })
@@ -49,7 +49,7 @@ export default class Boss extends GraphicGameObject {
       }
     }
     // collision between boss and player
-    if (this.game.checkCollision(this, this.game.player) && this.lives > 0) {
+    if (this.game.checkCollision(this, this.game.player) && this.alive) {
       this.game.isOver = true
       this.lives = 0
     }
@@ -57,8 +57,8 @@ export default class Boss extends GraphicGameObject {
     if (this.y + this.height > this.game.height) this.game.isOver = true
   }
 
-  private hit(damage: number) {
+  public hit(damage: number) {
     this.lives -= damage
-    if (this.lives > 0) this.frameX = 1
+    if (this.alive) this.frameX = 1
   }
 }

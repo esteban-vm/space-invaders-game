@@ -1,11 +1,12 @@
 import type { Game } from '@/types'
 import { GraphicGameObject } from '@/game-object'
 import Jets from '@/jets'
-import { SmallLaser } from '@/laser'
+import { LargeLaser, SmallLaser } from '@/laser'
 
 export default class Player extends GraphicGameObject {
   private jets
   private smLaser
+  private lgLaser
 
   constructor(game: Game) {
     super(game, 'player')
@@ -14,6 +15,7 @@ export default class Player extends GraphicGameObject {
     this.speed = 5
     this.jets = new Jets(this.game)
     this.smLaser = new SmallLaser(this.game)
+    this.lgLaser = new LargeLaser(this.game)
     this.start()
   }
 
@@ -30,6 +32,9 @@ export default class Player extends GraphicGameObject {
     } else if (this.game.isPressed('2')) {
       this.frameX = 2
       this.smLaser.draw()
+    } else if (this.game.isPressed('3')) {
+      this.frameX = 3
+      this.lgLaser.draw()
     } else {
       this.frameX = 0
     }
@@ -49,6 +54,7 @@ export default class Player extends GraphicGameObject {
     else if (this.x > right) this.x = right
     this.jets.update()
     this.smLaser.update()
+    this.lgLaser.update()
   }
 
   public shoot() {
