@@ -2,8 +2,8 @@ import type { GameObject, GraphicGameObject, ControlKey } from '@/types'
 import { Player, Boss, Projectile, Wave } from '@/models'
 
 export default class Game {
-  private canvas!: HTMLCanvasElement
-  private context!: CanvasRenderingContext2D
+  private canvas
+  private context
   private debug!: boolean
   public width!: number
   public height!: number
@@ -26,12 +26,12 @@ export default class Game {
   public waveCount!: number
 
   constructor(canvas: HTMLCanvasElement) {
-    this.init(canvas)
-  }
-
-  private init(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.context = this.canvas.getContext('2d')!
+    this.init()
+  }
+
+  private init() {
     this.debug = import.meta.env.DEV
     this.width = 600
     this.height = 800
@@ -102,10 +102,16 @@ export default class Game {
     this.context.restore()
   }
 
+  private toggleFullscreen() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen()
+    else document.exitFullscreen()
+  }
+
   private handleKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && !this.fired) this.player.shoot()
     if (event.key === 'r' && this.isOver) this.restart()
     if (event.key === 'd') this.debug = !this.debug
+    if (event.key === 'f') this.toggleFullscreen()
     if (this.keys.indexOf(event.key) === -1) this.keys.push(event.key)
     this.fired = true
   }
