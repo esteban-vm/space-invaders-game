@@ -2,21 +2,21 @@ import type { GameObject, GraphicGameObject, ControlKey } from '@/types'
 import { Player, Boss, Projectile, Wave } from '@/models'
 
 export default class Game {
-  private canvas
-  private context
-  private debug
-  public width
-  public height
-  public enemySize
-  public playerSize
-  public player
-  public updated
-  public fired
-  public keys
-  public projectiles
-  public maxProjectiles
-  public timer
-  public interval
+  private canvas!: HTMLCanvasElement
+  private context!: CanvasRenderingContext2D
+  private debug!: boolean
+  public width!: number
+  public height!: number
+  public enemySize!: number
+  public playerSize!: { width: number; height: number }
+  public player!: Player
+  public updated!: boolean
+  public fired!: boolean
+  public keys!: string[]
+  public projectiles!: Projectile[]
+  public maxProjectiles!: number
+  public timer!: number
+  public interval!: number
   public columns!: number
   public rows!: number
   public score!: number
@@ -26,6 +26,10 @@ export default class Game {
   public waveCount!: number
 
   constructor(canvas: HTMLCanvasElement) {
+    this.init(canvas)
+  }
+
+  private init(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.context = this.canvas.getContext('2d')!
     this.debug = import.meta.env.DEV
@@ -36,24 +40,17 @@ export default class Game {
     this.player = new Player(this)
     this.updated = false
     this.fired = false
-    this.keys = <string[]>[]
-    this.projectiles = <Projectile[]>[]
+    this.keys = []
+    this.projectiles = []
     this.maxProjectiles = 10
     this.timer = 0
     this.interval = 120
-    this.stylize()
     this.start()
+    this.canvas.width = this.width
+    this.canvas.height = this.height
     this.createProjectiles()
     window.addEventListener('keydown', this.handleKeydown)
     window.addEventListener('keyup', this.handleKeyup)
-  }
-
-  private stylize() {
-    this.canvas.width = this.width
-    this.canvas.height = this.height
-    this.context.fillStyle = 'aliceblue'
-    this.context.strokeStyle = 'aliceblue'
-    this.context.font = '30px Impact'
   }
 
   private start() {
@@ -81,6 +78,9 @@ export default class Game {
 
   private showStatus() {
     this.context.save()
+    this.context.font = '30px Impact'
+    this.context.fillStyle = 'aliceblue'
+    this.context.strokeStyle = 'aliceblue'
     this.context.shadowOffsetX = 2
     this.context.shadowOffsetY = 2
     this.context.shadowColor = 'black'
@@ -161,6 +161,8 @@ export default class Game {
       const { x, y, width, height, lives } = obj
       this.context.save()
       this.context.strokeRect(x, y, width, height)
+      this.context.font = '25px Impact'
+      this.context.fillStyle = 'aliceblue'
       this.context.textAlign = 'center'
       this.context.shadowOffsetX = 3
       this.context.shadowOffsetY = 3
