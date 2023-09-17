@@ -1,5 +1,5 @@
 import type { Game, Enemy } from '@/types'
-import { GameObject } from '@/game-object'
+import GameObject from '@/game-object'
 import { Beetlemorph, Rhinomorph } from '@/enemy'
 
 export default class Wave extends GameObject {

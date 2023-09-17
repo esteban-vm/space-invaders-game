@@ -1,6 +1,6 @@
 import type { Game, ResourceFilename } from '@/types'
 
-export abstract class GameObject {
+export default abstract class GameObject {
   protected game
   public width
   public height
