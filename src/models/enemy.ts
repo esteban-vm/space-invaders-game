@@ -25,6 +25,7 @@ export default abstract class Enemy extends GameObject {
         projectile.free = true
       }
     })
+    // enemy destroyed
     if (this.lives < 1) {
       if (this.game.updated) this.frameX++
       if (this.frameX > this.maxFrame) {

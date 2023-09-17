@@ -25,7 +25,7 @@ export default class Boss extends GameObject {
     this.speedY = 0
     if (this.game.updated && this.lives > 0) this.frameX = 0
     if (this.y < 0) this.y += 4
-    if (this.x < 0 || this.x > this.game.width - this.width) {
+    if (this.x < 0 || (this.x > this.game.width - this.width && this.lives > 0)) {
       this.speedX *= -1
       this.speedY = this.height * 0.5
     }
@@ -33,7 +33,7 @@ export default class Boss extends GameObject {
     this.y += this.speedY
     // collision between boss and projectiles
     this.game.projectiles.forEach((projectile) => {
-      if (!projectile.free && this.game.checkCollision(this, projectile) && this.lives > 0) {
+      if (!projectile.free && this.game.checkCollision(this, projectile) && this.lives > 0 && this.y >= 0) {
         this.hit(1)
         projectile.free = true
       }
@@ -43,9 +43,19 @@ export default class Boss extends GameObject {
       this.frameX++
       if (this.frameX > this.maxFrame) {
         this.markedForDeletion = true
-        this.game.score += this.maxLives
+        if (!this.game.isOver) {
+          this.game.score += this.maxLives
+          this.game.newWave()
+        }
       }
     }
+    // collision between boss and player
+    if (this.game.checkCollision(this, this.game.player) && this.lives > 0) {
+      this.game.isOver = true
+      this.lives = 0
+    }
+    // lose condition
+    if (this.y + this.height > this.game.height) this.game.isOver = true
   }
 
   private hit(damage: number) {

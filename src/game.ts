@@ -102,16 +102,6 @@ export default class Game {
     this.context.restore()
   }
 
-  private newWave() {
-    if (Math.random() < 0.5 && this.columns * this.enemySize < this.width * 0.8) {
-      this.columns++
-    } else if (this.rows * this.enemySize < this.height * 0.6) {
-      this.rows++
-    }
-    this.waves.push(new Wave(this))
-    this.waves = this.waves.filter((wave) => !wave.markedForDeletion)
-  }
-
   private handleKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && !this.fired) this.player.shoot()
     if (event.key === 'r' && this.isOver) this.restart()
@@ -124,6 +114,23 @@ export default class Game {
     const index = this.keys.indexOf(event.key)
     if (index > -1) this.keys.splice(index, 1)
     this.fired = false
+  }
+
+  public newWave() {
+    this.waveCount++
+    if (this.player.lives < this.player.maxLives) this.player.lives++
+    if (this.waveCount % 2 === 0) {
+      this.bosses.push(new Boss(this))
+    } else {
+      if (Math.random() < 0.5 && this.columns * this.enemySize < this.width * 0.8) {
+        this.columns++
+      } else if (this.rows * this.enemySize < this.height * 0.6) {
+        this.rows++
+      }
+      this.waves.push(new Wave(this))
+    }
+    this.waves = this.waves.filter((wave) => !wave.markedForDeletion)
+    this.bosses = this.bosses.filter((boss) => !boss.markedForDeletion)
   }
 
   public getProjectile() {
@@ -190,12 +197,9 @@ export default class Game {
       wave.update()
       if (wave.enemies.length < 1 && !wave.nextTrigger && !this.isOver) {
         this.newWave()
-        this.waveCount++
         wave.nextTrigger = true
-        if (this.player.lives < this.player.maxLives) this.player.lives++
       }
     })
-    this.bosses = this.bosses.filter((boss) => !boss.markedForDeletion)
     this.player.draw()
     this.player.update()
   }
