@@ -1,4 +1,3 @@
-import '@/main.css'
 import Game from '@/game'
 
 window.addEventListener('load', function () {

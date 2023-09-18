@@ -33,7 +33,7 @@ button {
     transform: scale(0.9);
   }
 
-  @media (any-pointer: fine), (orientation: landscape) {
+  @media (pointer: fine), (orientation: landscape) {
     display: none;
   }
 }
