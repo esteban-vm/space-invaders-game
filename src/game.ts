@@ -121,6 +121,10 @@ export default class Game {
     this.context.restore()
   }
 
+  private toggleDebugger() {
+    this.debug = !this.debug
+  }
+
   private toggleFullscreen() {
     if (!document.fullscreenElement) document.documentElement.requestFullscreen()
     else document.exitFullscreen()
@@ -129,7 +133,7 @@ export default class Game {
   private handleKeydown(event: KeyboardEvent) {
     if (event.key === '1' && !this.fired) this.player.shoot()
     if (event.key === 'r' && this.isOver) this.restart()
-    if (event.key === 'd') this.debug = !this.debug
+    if (event.key === 'd') this.toggleDebugger()
     if (event.key === 'f') this.toggleFullscreen()
     if (this.keys.indexOf(event.key) === -1) this.keys.push(event.key)
     this.fired = true
