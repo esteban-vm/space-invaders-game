@@ -1,5 +1,5 @@
 import type { GameObject, GraphicGameObject, ControlKey } from '@/types'
-import { Player, Boss, Projectile, Wave } from '@/models'
+import { Player, Boss, PlayerProjectile, EnemyProjectile, Wave } from '@/models'
 
 export default class Game {
   private canvas
@@ -13,8 +13,10 @@ export default class Game {
   public updated!: boolean
   public fired!: boolean
   public keys!: string[]
-  public projectiles!: Projectile[]
+  public projectiles!: PlayerProjectile[]
   public maxProjectiles!: number
+  public enemyProjectiles!: EnemyProjectile[]
+  public maxEnemyProjectiles!: number
   public timer!: number
   public interval!: number
   public columns!: number
@@ -43,12 +45,15 @@ export default class Game {
     this.keys = []
     this.projectiles = []
     this.maxProjectiles = 10
+    this.enemyProjectiles = []
+    this.maxEnemyProjectiles = 10
     this.timer = 0
     this.interval = 120
     this.start()
     this.canvas.width = this.width
     this.canvas.height = this.height
     this.createProjectiles()
+    this.createEnemyProjectiles()
     this.handleKeydown = this.handleKeydown.bind(this)
     this.handleKeyup = this.handleKeyup.bind(this)
     window.addEventListener('keydown', this.handleKeydown)
@@ -61,9 +66,9 @@ export default class Game {
     this.score = 0
     this.isOver = false
     this.bosses = []
-    this.bosses.push(new Boss(this))
+    // this.bosses.push(new Boss(this))
     this.waves = []
-    // this.waves.push(new Wave(this))
+    this.waves.push(new Wave(this))
     this.waveCount = 1
   }
 
@@ -74,7 +79,13 @@ export default class Game {
 
   private createProjectiles() {
     for (let projectile = 1; projectile <= this.maxProjectiles; projectile++) {
-      this.projectiles.push(new Projectile(this))
+      this.projectiles.push(new PlayerProjectile(this))
+    }
+  }
+
+  private createEnemyProjectiles() {
+    for (let projectile = 1; projectile <= this.maxEnemyProjectiles; projectile++) {
+      this.enemyProjectiles.push(new EnemyProjectile(this))
     }
   }
 
@@ -153,6 +164,12 @@ export default class Game {
     }
   }
 
+  public getEnemyProjectile() {
+    for (const projectile of this.enemyProjectiles) {
+      if (projectile.free) return projectile
+    }
+  }
+
   public isPressed(key: ControlKey) {
     return this.keys.indexOf(key) > -1
   }
@@ -203,6 +220,10 @@ export default class Game {
     this.context.clearRect(0, 0, this.width, this.height)
     this.showStatus()
     this.projectiles.forEach((projectile) => {
+      projectile.draw()
+      projectile.update()
+    })
+    this.enemyProjectiles.forEach((projectile) => {
       projectile.draw()
       projectile.update()
     })

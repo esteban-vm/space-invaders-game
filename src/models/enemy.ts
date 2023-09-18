@@ -72,3 +72,30 @@ export class Rhinomorph extends Enemy {
     this.frameX = this.maxHealth - Math.floor(this.health)
   }
 }
+
+export class Eaglemorph extends Enemy {
+  private shoots
+
+  constructor(...params: [game: Game, x: number, y: number]) {
+    super('eaglemorph', ...params)
+    this.health = 4
+    this.maxHealth = this.health
+    this.maxFrame = 8
+    this.shoots = 0
+  }
+
+  public hit(damage: number) {
+    super.hit(damage)
+    this.frameX = this.maxHealth - Math.floor(this.health)
+    this.y += 3
+    if (this.shoots < 4) this.shoot()
+  }
+
+  public shoot() {
+    const projectile = this.game.getEnemyProjectile()
+    if (projectile) {
+      projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5)
+      this.shoots++
+    }
+  }
+}
