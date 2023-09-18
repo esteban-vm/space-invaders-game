@@ -1,6 +1,6 @@
 import type { Game, Enemy } from '@/types'
 import GameObject from '@/game-object'
-import { Beetlemorph, Eaglemorph, Rhinomorph } from '@/enemy'
+import { Beetlemorph, Eaglemorph, Rhinomorph, Squidmorph } from '@/enemy'
 
 export default class Wave extends GameObject {
   public nextTrigger
@@ -43,8 +43,9 @@ export default class Wave extends GameObject {
         const enemyX = x * this.game.enemySize
         const enemyY = y * this.game.enemySize
         const randomize = Math.random()
-        if (randomize < 0.3) this.enemies.push(new Eaglemorph(this.game, enemyX, enemyY))
-        else if (randomize < 0.6) this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
+        if (randomize < 0.25) this.enemies.push(new Squidmorph(this.game, enemyX, enemyY))
+        else if (randomize < 0.5) this.enemies.push(new Eaglemorph(this.game, enemyX, enemyY))
+        else if (randomize < 0.7) this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
         else this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
       }
     }

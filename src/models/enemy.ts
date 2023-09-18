@@ -44,6 +44,11 @@ export default abstract class Enemy extends GraphicGameObject {
       this.game.isOver = true
     }
   }
+
+  public hit(damage: number) {
+    super.hit(damage)
+    if (this.alive) this.frameX = this.maxHealth - Math.floor(this.health)
+  }
 }
 
 export class Beetlemorph extends Enemy {
@@ -62,11 +67,6 @@ export class Rhinomorph extends Enemy {
     this.maxHealth = this.health
     this.maxFrame = 5
   }
-
-  public hit(damage: number) {
-    super.hit(damage)
-    this.frameX = this.maxHealth - Math.floor(this.health)
-  }
 }
 
 export class Eaglemorph extends Enemy {
@@ -82,16 +82,24 @@ export class Eaglemorph extends Enemy {
 
   public hit(damage: number) {
     super.hit(damage)
-    this.frameX = this.maxHealth - Math.floor(this.health)
     this.y += 3
     if (this.shoots < 4) this.shoot()
   }
 
-  public shoot() {
+  private shoot() {
     const projectile = this.game.getEnemyProjectile()
     if (projectile) {
       projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5)
       this.shoots++
     }
+  }
+}
+
+export class Squidmorph extends Enemy {
+  constructor(...params: [game: Game, x: number, y: number]) {
+    super('squidmorph', ...params)
+    this.health = 9
+    this.maxHealth = this.health
+    this.maxFrame = 16
   }
 }
