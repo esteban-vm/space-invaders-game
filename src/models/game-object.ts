@@ -53,4 +53,8 @@ export abstract class GraphicGameObject extends GameObject {
   public get alive() {
     return this.health >= 1
   }
+
+  public hit(damage: number) {
+    this.health -= damage
+  }
 }

@@ -43,8 +43,8 @@ export default class Wave extends GameObject {
         const enemyX = x * this.game.enemySize
         const enemyY = y * this.game.enemySize
         const randomize = Math.random()
-        if (randomize < 0.8) this.enemies.push(new Eaglemorph(this.game, enemyX, enemyY))
-        else if (randomize < 0.9) this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
+        if (randomize < 0.3) this.enemies.push(new Eaglemorph(this.game, enemyX, enemyY))
+        else if (randomize < 0.6) this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
         else this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
       }
     }

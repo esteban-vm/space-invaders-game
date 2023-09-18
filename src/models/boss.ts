@@ -58,7 +58,7 @@ export default class Boss extends GraphicGameObject {
   }
 
   public hit(damage: number) {
-    this.health -= damage
+    super.hit(damage)
     if (this.alive) this.frameX = 1
   }
 }

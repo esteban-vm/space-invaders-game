@@ -190,8 +190,8 @@ export default class Game {
   }
 
   public stroke(obj: GraphicGameObject) {
-    if (this.debug) {
-      const { x, y, width, height, health } = obj
+    const { x, y, width, height, health } = obj
+    if (this.debug && health > 0) {
       this.context.save()
       this.context.strokeRect(x, y, width, height)
       this.context.font = '25px Impact'

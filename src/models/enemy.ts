@@ -44,10 +44,6 @@ export default abstract class Enemy extends GraphicGameObject {
       this.game.isOver = true
     }
   }
-
-  public hit(damage: number) {
-    this.health -= damage
-  }
 }
 
 export class Beetlemorph extends Enemy {
