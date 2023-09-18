@@ -4,7 +4,8 @@ import { Player, Boss, PlayerProjectile, EnemyProjectile, Wave } from '@/models'
 export default class Game {
   private canvas
   private context
-  private debug!: boolean
+  private debug
+  private touch
   public width!: number
   public height!: number
   public enemySize!: number
@@ -30,11 +31,12 @@ export default class Game {
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.context = this.canvas.getContext('2d')!
+    this.debug = import.meta.env.DEV
+    this.touch = window.matchMedia('(any-pointer: coarse)').matches
     this.init()
   }
 
   private init() {
-    this.debug = import.meta.env.DEV
     this.width = 600
     this.height = 800
     this.enemySize = 80
@@ -54,10 +56,17 @@ export default class Game {
     this.canvas.height = this.height
     this.createProjectiles()
     this.createEnemyProjectiles()
-    this.handleKeydown = this.handleKeydown.bind(this)
-    this.handleKeyup = this.handleKeyup.bind(this)
-    window.addEventListener('keydown', this.handleKeydown)
-    window.addEventListener('keyup', this.handleKeyup)
+    if (!this.touch) {
+      this.handleKeydown = this.handleKeydown.bind(this)
+      this.handleKeyup = this.handleKeyup.bind(this)
+      window.addEventListener('keydown', this.handleKeydown)
+      window.addEventListener('keyup', this.handleKeyup)
+    } else {
+      this.handlePointerdown = this.handlePointerdown.bind(this)
+      this.handlePointerup = this.handlePointerup.bind(this)
+      window.addEventListener('pointerdown', this.handlePointerdown)
+      window.addEventListener('pointerup', this.handlePointerup)
+    }
   }
 
   private start() {
@@ -142,6 +151,28 @@ export default class Game {
   private handleKeyup(event: KeyboardEvent) {
     const index = this.keys.indexOf(event.key)
     if (index > -1) this.keys.splice(index, 1)
+    this.fired = false
+  }
+
+  private handlePointerdown(event: PointerEvent) {
+    const element = <HTMLElement>event.target
+    if (element.id === 'right') this.keys.push('ArrowRight')
+    if (element.id === 'left') this.keys.push('ArrowLeft')
+    if (element.id === 'sm-laser') this.keys.push('2')
+    if (element.id === 'lg-laser') this.keys.push('3')
+    if (element.id === 'shoot') this.player.shoot()
+    this.fired = true
+  }
+
+  private handlePointerup() {
+    const rightIndex = this.keys.indexOf('ArrowRight')
+    const leftIndex = this.keys.indexOf('ArrowLeft')
+    const smLaserIndex = this.keys.indexOf('2')
+    const lgLaserIndex = this.keys.indexOf('3')
+    if (rightIndex > -1) this.keys.splice(rightIndex, 1)
+    if (leftIndex > -1) this.keys.splice(leftIndex, 1)
+    if (smLaserIndex > -1) this.keys.splice(smLaserIndex, 1)
+    if (lgLaserIndex > -1) this.keys.splice(lgLaserIndex, 1)
     this.fired = false
   }
 

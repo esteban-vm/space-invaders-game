@@ -3,6 +3,7 @@
 body {
   background-color: #242424;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -14,4 +15,25 @@ canvas {
   max-height: calc(100vh - 10px);
   background: url('/assets/background.png');
   background-size: cover;
+}
+
+button {
+  padding: 0.3rem;
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  font-family: Impact, sans-serif;
+  border: none;
+  color: aliceblue;
+  background-color: black;
+  text-align: center;
+  user-select: none;
+  transition: transform 200ms;
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  @media (any-pointer: fine), (orientation: landscape) {
+    display: none;
+  }
 }
