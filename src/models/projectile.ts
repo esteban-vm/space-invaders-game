@@ -53,7 +53,10 @@ export class EnemyProjectile extends GraphicGameObject implements Projectile {
   }
 
   public draw() {
-    if (!this.free) this.game.add(this)
+    if (!this.free) {
+      this.game.stroke(this)
+      this.game.add(this)
+    }
   }
 
   public update() {
