@@ -67,7 +67,9 @@ export class EnemyProjectile extends GraphicGameObject implements Projectile {
       if (this.game.checkCollision(this, this.game.player)) {
         this.free = true
         this.game.player.health--
-        if (!this.game.player.alive) this.game.isOver = true
+        if (!this.game.player.alive) {
+          this.game.isOver = true
+        }
       }
       // collision between enemy projectile and player projectile
       this.game.projectiles.forEach((projectile) => {

@@ -1,4 +1,4 @@
-import type { Game, Enemy } from '@/types'
+import type { Game, Enemy, DefinedEnemyParams } from '@/types'
 import GameObject from '@/game-object'
 import { Beetlemorph, Eaglemorph, Rhinomorph, Squidmorph } from '@/enemy'
 
@@ -40,13 +40,12 @@ export default class Wave extends GameObject {
   private create() {
     for (let y = 0; y < this.game.rows; y++) {
       for (let x = 0; x < this.game.columns; x++) {
-        const enemyX = x * this.game.enemySize
-        const enemyY = y * this.game.enemySize
+        const enemyParams: DefinedEnemyParams = [this.game, x * this.game.enemySize, y * this.game.enemySize]
         const randomize = Math.random()
-        if (randomize < 0.25) this.enemies.push(new Squidmorph(this.game, enemyX, enemyY))
-        else if (randomize < 0.5) this.enemies.push(new Eaglemorph(this.game, enemyX, enemyY))
-        else if (randomize < 0.7) this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
-        else this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
+        if (randomize < 0.25) this.enemies.push(new Squidmorph(...enemyParams))
+        else if (randomize < 0.5) this.enemies.push(new Eaglemorph(...enemyParams))
+        else if (randomize < 0.7) this.enemies.push(new Rhinomorph(...enemyParams))
+        else this.enemies.push(new Beetlemorph(...enemyParams))
       }
     }
   }

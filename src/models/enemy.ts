@@ -1,4 +1,4 @@
-import type { Game, ResourceFilename } from '@/types'
+import type { Game, ResourceFilename, ShiftTuple } from '@/types'
 import { GraphicGameObject } from '@/game-object'
 
 export default abstract class Enemy extends GraphicGameObject {
@@ -47,12 +47,16 @@ export default abstract class Enemy extends GraphicGameObject {
 
   public hit(damage: number) {
     super.hit(damage)
-    if (this.alive) this.frameX = this.maxHealth - Math.floor(this.health)
+    if (this.alive) {
+      this.frameX = this.maxHealth - Math.floor(this.health)
+    }
   }
 }
 
+export type DefinedEnemyParams = ShiftTuple<ConstructorParameters<typeof Enemy>>
+
 export class Beetlemorph extends Enemy {
-  constructor(...params: [game: Game, x: number, y: number]) {
+  constructor(...params: DefinedEnemyParams) {
     super('beetlemorph', ...params)
     this.health = 1
     this.maxHealth = this.health
@@ -61,7 +65,7 @@ export class Beetlemorph extends Enemy {
 }
 
 export class Rhinomorph extends Enemy {
-  constructor(...params: [game: Game, x: number, y: number]) {
+  constructor(...params: DefinedEnemyParams) {
     super('rhinomorph', ...params)
     this.health = 4
     this.maxHealth = this.health
@@ -72,7 +76,7 @@ export class Rhinomorph extends Enemy {
 export class Eaglemorph extends Enemy {
   private shoots
 
-  constructor(...params: [game: Game, x: number, y: number]) {
+  constructor(...params: DefinedEnemyParams) {
     super('eaglemorph', ...params)
     this.health = 4
     this.maxHealth = this.health
@@ -96,7 +100,7 @@ export class Eaglemorph extends Enemy {
 }
 
 export class Squidmorph extends Enemy {
-  constructor(...params: [game: Game, x: number, y: number]) {
+  constructor(...params: DefinedEnemyParams) {
     super('squidmorph', ...params)
     this.health = 9
     this.maxHealth = this.health

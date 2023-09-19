@@ -14,3 +14,8 @@ export interface Projectile {
   free: boolean
   start(x: number, y: number): void
 }
+
+/**
+ * @see {@link https://blog.e-mundo.de/post/typescript-tuple-trickery-utility-types-for-tuples/ |TypeScript Tuple Trickery - Utility Types for Tuples - eMundo Blog}
+ */
+export type ShiftTuple<T extends unknown[]> = T extends [T[0], ...infer R] ? R : never

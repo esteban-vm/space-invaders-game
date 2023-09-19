@@ -54,7 +54,9 @@ export default class Boss extends GraphicGameObject {
       this.health = 0
     }
     // lose condition
-    if (this.y + this.height > this.game.height) this.game.isOver = true
+    if (this.y + this.height > this.game.height) {
+      this.game.isOver = true
+    }
   }
 
   public hit(damage: number) {
