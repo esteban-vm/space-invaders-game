@@ -1,13 +1,15 @@
 # Space Invaders Game
 
+[Link](https://space-invaders-game-indol.vercel.app/ 'Click to enter')
+
 ## Main dependencies:
 
-- [Vite](https://v2.vitejs.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [ESLint](https://eslint.org/)
-- [Prettier](https://prettier.io/)
+- [Vite](https://v2.vitejs.dev/ 'Vite')
+- [TypeScript](https://www.typescriptlang.org/ 'TypeScript')
+- [ESLint](https://eslint.org/ 'ESLint')
+- [Prettier](https://prettier.io/ 'Prettier')
 
-## Control keys:
+## Controls:
 
 - **right/left arrow**: move the player
 - **1**: shoot projectile
@@ -24,6 +26,6 @@ _(touch screens are moderately supported but not recommended)_
 
 ## License:
 
-This project is released under the MIT [LICENSE](/LICENSE)
+This project is released under the MIT [LICENSE](/LICENSE 'License')
 
 ![Space Invaders Game screenshot](/screenshot.jpeg 'Space Invaders Game screenshot')
