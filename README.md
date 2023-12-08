@@ -2,6 +2,9 @@
 
 [Link](https://space-invaders-game-indol.vercel.app/ 'Click to enter')
 
+## Description:
+A simple web-based version of space invaders game
+
 ## Main dependencies:
 
 - [Vite](https://v2.vitejs.dev/ 'Vite')
